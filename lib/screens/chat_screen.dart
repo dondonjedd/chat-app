@@ -6,13 +6,14 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String firestoreMessages = 'chats/0tMShBHc2IBh6dcoB0nQ/messages';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chat'),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('chats/0tMShBHc2IBh6dcoB0nQ/messages')
+            .collection(firestoreMessages)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -32,7 +33,11 @@ class ChatScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.send),
-        onPressed: () {},
+        onPressed: () {
+          FirebaseFirestore.instance
+              .collection(firestoreMessages)
+              .add({'text': 'new Text'});
+        },
       ),
     );
   }
