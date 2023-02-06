@@ -17,8 +17,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          colorScheme: ThemeData.light().colorScheme.copyWith(
+                primary: Colors.yellow[700],
+                secondary: Colors.blue[700],
+              ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30))))),
       home: const AuthScreen(),
     );
   }
