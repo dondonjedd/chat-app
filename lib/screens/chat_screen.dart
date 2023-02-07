@@ -1,3 +1,4 @@
+import 'package:chat_app/widgets/messages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -40,25 +41,10 @@ class ChatScreen extends StatelessWidget {
           )
         ],
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection(firestoreMessages)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          final docs = snapshot.data!.docs;
-          return ListView.builder(
-            itemCount: docs.length,
-            itemBuilder: (context, index) => Container(
-              padding: const EdgeInsets.all(10),
-              child: Text(docs[index]['text']),
-            ),
-          );
-        },
+      body: Container(
+        child: Column(
+          children: const [Expanded(child: Messages())],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.send),
