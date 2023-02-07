@@ -7,7 +7,10 @@ class Messages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('chats').snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('chats')
+          .orderBy('createdAt')
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -15,13 +18,13 @@ class Messages extends StatelessWidget {
           );
         }
         final docs = snapshot.data!.docs;
-          return ListView.builder(
-            itemCount: docs.length,
-            itemBuilder: (context, index) => Container(
-              padding: const EdgeInsets.all(10),
-              child: Text(docs[index]['text']),
-            ),
-          );
+        return ListView.builder(
+          itemCount: docs.length,
+          itemBuilder: (context, index) => Container(
+            padding: const EdgeInsets.all(10),
+            child: Text(docs[index]['text']),
+          ),
+        );
       },
     );
   }

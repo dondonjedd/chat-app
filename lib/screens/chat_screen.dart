@@ -1,5 +1,5 @@
+import 'package:chat_app/widgets/message_input.dart';
 import 'package:chat_app/widgets/messages.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +8,6 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String firestoreMessages = 'chats/0tMShBHc2IBh6dcoB0nQ/messages';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chat'),
@@ -43,16 +42,8 @@ class ChatScreen extends StatelessWidget {
       ),
       body: Container(
         child: Column(
-          children: const [Expanded(child: Messages())],
+          children: const [Expanded(child: Messages()), MessageInput()],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.send),
-        onPressed: () {
-          FirebaseFirestore.instance
-              .collection(firestoreMessages)
-              .add({'text': 'new Text'});
-        },
       ),
     );
   }
