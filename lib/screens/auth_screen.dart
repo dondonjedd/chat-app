@@ -17,6 +17,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
 
+  @override
   void _submitAuthForm(
       {required String email,
       required String password,
@@ -31,17 +32,11 @@ class _AuthScreenState extends State<AuthScreen> {
         _isLoading = true;
       });
       if (isLogin) {
-        authResult = await _auth
-            .signInWithEmailAndPassword(email: email, password: password)
-            .whenComplete(() => setState(() {
-                  _isLoading = false;
-                }));
+        authResult = await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
       } else {
-        authResult = await _auth
-            .createUserWithEmailAndPassword(email: email, password: password)
-            .whenComplete(() => setState(() {
-                  _isLoading = false;
-                }));
+        authResult = await _auth.createUserWithEmailAndPassword(
+            email: email, password: password);
 
         final ref = FirebaseStorage.instance
             .ref()
@@ -50,11 +45,12 @@ class _AuthScreenState extends State<AuthScreen> {
 
         await ref.putFile(image);
 
+        final imageURL = await ref.getDownloadURL();
+
         await FirebaseFirestore.instance
             .collection('users')
             .doc(authResult.user!.uid)
-            .set({'username': username, 'email': email}).whenComplete(
-                () => null);
+            .set({'username': username, 'email': email, 'imageUrl': imageURL});
       }
     } on FirebaseAuthException catch (e) {
       var message = 'Error occured. Check your credentials';

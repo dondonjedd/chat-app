@@ -18,7 +18,8 @@ class ImageInputState extends State<ImageInput> {
   Widget build(BuildContext context) {
     void _pickImage() async {
       final picker = ImagePicker();
-      final pickedImage = await picker.pickImage(source: ImageSource.camera);
+      final pickedImage = await picker.pickImage(
+          source: ImageSource.camera, imageQuality: 50, maxWidth: 150);
       if (pickedImage == null) {
         return;
       }
