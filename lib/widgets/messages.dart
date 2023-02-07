@@ -1,3 +1,4 @@
+import 'package:chat_app/widgets/message_bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -20,10 +21,8 @@ class Messages extends StatelessWidget {
         final docs = snapshot.data!.docs;
         return ListView.builder(
           itemCount: docs.length,
-          itemBuilder: (context, index) => Container(
-            padding: const EdgeInsets.all(10),
-            child: Text(docs[index]['text']),
-          ),
+          itemBuilder: (context, index) =>
+              MessageBubble(message: docs[index]['text']),
         );
       },
     );

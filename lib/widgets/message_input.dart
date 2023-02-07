@@ -9,7 +9,6 @@ class MessageInput extends StatefulWidget {
 }
 
 class _MessageInputState extends State<MessageInput> {
-  final _enteredMessage = '';
   late TextEditingController _messageController;
 
   @override
