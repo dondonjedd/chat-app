@@ -7,7 +7,10 @@ class AuthForm extends StatefulWidget {
       required String username,
       required bool isLogin,
       required BuildContext ctx}) submitAuthForm;
-  const AuthForm({super.key, required this.submitAuthForm});
+
+  final bool isLoading;
+  const AuthForm(
+      {super.key, required this.submitAuthForm, required this.isLoading});
 
   @override
   State<AuthForm> createState() => _AuthFormState();
@@ -98,12 +101,16 @@ class _AuthFormState extends State<AuthForm> {
                     const SizedBox(
                       height: 12,
                     ),
-                    ElevatedButton(
-                        onPressed: _trySubmit,
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.primary)),
-                        child: Text(_loginMode ? 'Login' : 'Sign up')),
+                    widget.isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : ElevatedButton(
+                            onPressed: _trySubmit,
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStatePropertyAll(
+                                    Theme.of(context).colorScheme.primary)),
+                            child: Text(_loginMode ? 'Login' : 'Sign up')),
                     TextButton(
                         onPressed: () {
                           setState(() {
