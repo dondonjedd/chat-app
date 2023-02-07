@@ -1,4 +1,5 @@
 import 'package:chat_app/widgets/auth_form.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +18,8 @@ class _AuthScreenState extends State<AuthScreen> {
       {required String email,
       required String password,
       required String username,
-      required bool isLogin,required BuildContext ctx}) async {
+      required bool isLogin,
+      required BuildContext ctx}) async {
     UserCredential authResult;
     try {
       if (isLogin) {
@@ -26,6 +28,10 @@ class _AuthScreenState extends State<AuthScreen> {
       } else {
         authResult = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(authResult.user!.uid)
+            .set({'username': username, 'email': email});
       }
     } on PlatformException catch (e) {
       var message = 'Error occured. Check your credentials';
