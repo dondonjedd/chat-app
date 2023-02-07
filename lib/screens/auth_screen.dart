@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:chat_app/widgets/auth_form.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -19,22 +22,39 @@ class _AuthScreenState extends State<AuthScreen> {
       required String password,
       required String username,
       required bool isLogin,
+      required File image,
       required BuildContext ctx}) async {
     UserCredential authResult;
+
     try {
       setState(() {
         _isLoading = true;
       });
       if (isLogin) {
-        authResult = await _auth.signInWithEmailAndPassword(
-            email: email, password: password);
+        authResult = await _auth
+            .signInWithEmailAndPassword(email: email, password: password)
+            .whenComplete(() => setState(() {
+                  _isLoading = false;
+                }));
       } else {
-        authResult = await _auth.createUserWithEmailAndPassword(
-            email: email, password: password);
+        authResult = await _auth
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .whenComplete(() => setState(() {
+                  _isLoading = false;
+                }));
+
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('user_images')
+            .child('${authResult.user!.uid}.jpg');
+
+        await ref.putFile(image);
+
         await FirebaseFirestore.instance
             .collection('users')
             .doc(authResult.user!.uid)
-            .set({'username': username, 'email': email});
+            .set({'username': username, 'email': email}).whenComplete(
+                () => null);
       }
     } on FirebaseAuthException catch (e) {
       var message = 'Error occured. Check your credentials';
@@ -46,13 +66,15 @@ class _AuthScreenState extends State<AuthScreen> {
         content: Text(message),
         backgroundColor: Theme.of(ctx).colorScheme.error,
       ));
+      setState(() {
+        _isLoading = false;
+      });
     } catch (e) {
       print("ERROR: $e");
+      setState(() {
+        _isLoading = false;
+      });
     }
-
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override
