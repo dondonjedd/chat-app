@@ -12,29 +12,24 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  bool _isInit = false;
-
   @override
-  void didChangeDependencies() async {
-    // TODO: implement didChangeDependencies
-    if (!_isInit) {
-      final fbm = FirebaseMessaging.instance;
-      await fbm.requestPermission();
-      FirebaseMessaging.onMessage.listen((message) {
-        print(message.data);
-        _isInit = true;
-        return;
-      });
-      FirebaseMessaging.onMessageOpenedApp.listen((message) {
-        print(message.data);
-        _isInit = true;
-        return;
-      });
-      fbm.subscribeToTopic('chats');
-      _isInit = true;
-    }
+  void initState() {
+    // TODO: implement initState
+    super.initState();
 
-    super.didChangeDependencies();
+    final fbm = FirebaseMessaging.instance;
+    fbm.requestPermission();
+    FirebaseMessaging.onMessage.listen((message) {
+      print(message.data);
+
+      return;
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print(message.data);
+
+      return;
+    });
+    fbm.subscribeToTopic('chats');
   }
 
   @override
@@ -44,6 +39,7 @@ class _ChatScreenState extends State<ChatScreen> {
         title: const Text('Chat'),
         actions: [
           DropdownButton(
+            underline: Container(),
             items: [
               DropdownMenuItem(
                   value: 'logout',

@@ -42,7 +42,7 @@ class _MessageInputState extends State<MessageInput> {
       'createdAt': Timestamp.now(),
       'userId': FirebaseAuth.instance.currentUser!.uid,
       'username': userArgs['username'],
-      'imageUrl':userArgs['imageUrl'],
+      'imageUrl': userArgs['imageUrl'],
     });
     setState(() {
       _messageController.clear();
@@ -58,6 +58,9 @@ class _MessageInputState extends State<MessageInput> {
         children: [
           Expanded(
               child: TextField(
+            textCapitalization: TextCapitalization.sentences,
+            autocorrect: true,
+            enableSuggestions: true,
             controller: _messageController,
             decoration: const InputDecoration(labelText: 'Type here...'),
           )),

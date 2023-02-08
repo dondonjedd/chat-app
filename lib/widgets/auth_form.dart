@@ -72,6 +72,8 @@ class _AuthFormState extends State<AuthForm> {
                     if (!_loginMode) ImageInput(SetImageFn: setImage),
                     TextFormField(
                       key: const ValueKey('email'),
+                      autocorrect: false,
+                      textCapitalization: TextCapitalization.none,
                       validator: (value) {
                         if (value!.isEmpty || !value.contains('@')) {
                           return 'Please enter a valid email address';
@@ -88,6 +90,8 @@ class _AuthFormState extends State<AuthForm> {
                     if (!_loginMode)
                       TextFormField(
                         key: const ValueKey('username'),
+                        autocorrect: true,
+                        textCapitalization: TextCapitalization.words,
                         validator: (value) {
                           if (value!.isEmpty || value.length < 4) {
                             return 'Username needs to be at least 4 characters long';
