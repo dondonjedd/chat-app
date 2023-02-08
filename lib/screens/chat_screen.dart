@@ -1,10 +1,40 @@
 import 'package:chat_app/widgets/message_input.dart';
 import 'package:chat_app/widgets/messages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
+
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  bool _isInit = false;
+
+  @override
+  void didChangeDependencies() async {
+    // TODO: implement didChangeDependencies
+    if (!_isInit) {
+      final fbm = FirebaseMessaging.instance;
+      await fbm.requestPermission();
+      FirebaseMessaging.onMessage.listen((message) {
+        print(message.data);
+        _isInit = true;
+        return;
+      });
+      FirebaseMessaging.onMessageOpenedApp.listen((message) {
+        print(message.data);
+        _isInit = true;
+        return;
+      });
+      fbm.subscribeToTopic('chats');
+    }
+
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
