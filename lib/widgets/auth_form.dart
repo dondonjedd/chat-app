@@ -9,7 +9,7 @@ class AuthForm extends StatefulWidget {
       required String password,
       required String username,
       required bool isLogin,
-      required File image,
+      required File? image,
       required BuildContext ctx}) submitAuthForm;
 
   final bool isLoading;
@@ -31,7 +31,7 @@ class _AuthFormState extends State<AuthForm> {
   void _trySubmit() {
     FocusScope.of(context).unfocus();
     final isValid = _formKey.currentState!.validate();
-    if (_pickedImage == null) {
+    if (_pickedImage == null && !_loginMode) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: const Text("No image chosen"),
         backgroundColor: Theme.of(context).colorScheme.error,
@@ -47,7 +47,7 @@ class _AuthFormState extends State<AuthForm> {
           password: _userPassword,
           username: _userName,
           isLogin: _loginMode,
-          image: _pickedImage!,
+          image: _pickedImage,
           ctx: context);
     }
   }

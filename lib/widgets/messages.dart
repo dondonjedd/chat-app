@@ -28,6 +28,7 @@ class Messages extends StatelessWidget {
             isMe:
                 docs[index]['userId'] == FirebaseAuth.instance.currentUser!.uid,
             username: docs[index]['username'] ?? 'anonymous',
+            imageUrl:docs[index]['imageUrl'],
           ),
         );
       },

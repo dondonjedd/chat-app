@@ -42,6 +42,7 @@ class _MessageInputState extends State<MessageInput> {
       'createdAt': Timestamp.now(),
       'userId': FirebaseAuth.instance.currentUser!.uid,
       'username': userArgs['username'],
+      'imageUrl':userArgs['imageUrl'],
     });
     setState(() {
       _messageController.clear();
