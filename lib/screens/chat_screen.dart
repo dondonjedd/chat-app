@@ -31,6 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
         return;
       });
       fbm.subscribeToTopic('chats');
+      _isInit = true;
     }
 
     super.didChangeDependencies();
